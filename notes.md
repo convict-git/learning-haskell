@@ -17,7 +17,7 @@
             | False
     ```
 
-- Binary tree comparision *Haskell* and *SML*
+- Binary tree of polymorphic type, comparision b/w *Haskell* and *SML*
    ```haskell
    -- Binary tree in Haskell in uncurry version of Node
    data Tree a  = Nil
@@ -42,4 +42,24 @@
    nil : 'a tree
    node : ('a tree * 'a tree * 'a tree) -> 'a tree
    ```
--
+- Map function
+    ```haskell
+    -- map :: (a -> b) -> [a] -> [b]
+    map f (x:xs) = f x : map f xs
+        f _      = []
+    ```
+
+- Fold function
+    foldl : fold from left  ((..(f (f (f x0 x1) x2) x3) ...)
+    ```haskell
+    -- foldl :: (b -> a -> b) -> b -> [a] -> b
+    foldl f b0 (x:xs) = foldl f (f b0 x) xs
+          f b0 _      = b0
+    ```
+
+    foldr : fold from right (....(f xn-2 (f xn-1 (f xn x0)))...)
+    ```haskell
+    -- foldr :: (a -> b -> b) -> b -> [a] -> b
+    foldr f b0 (x:xs) = f x (foldr f b0 xs)
+          f b0 _      = b0
+    ```
