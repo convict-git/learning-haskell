@@ -3,6 +3,11 @@
 ### Haskell Intro
 - *Types* and *constructors* should start with CAPITAL letters.
 - Haskell is indendation sensitive
+- *Function application* is left associative, so take care while dealing with
+    curry form
+    `f1 f2 ... fn = (... (((f1 f2) f3) f4) ... )fn)`
+    while *arrow application* is right associative, i.e. `t1 -> t2 -> t3 -> ...
+    -> tn = t1 -> (t2 -> (t3 -> (...)))`
 
 - Two ways to do define:
     1)
@@ -50,14 +55,14 @@
     ```
 
 - Fold function
-    foldl : fold from left  ((..(f (f (f x0 x1) x2) x3) ...)
+    foldl : fold from left  `((..(f (f (f x0 x1) x2) x3) ...)`
     ```haskell
     -- foldl :: (b -> a -> b) -> b -> [a] -> b
     foldl f b0 (x:xs) = foldl f (f b0 x) xs
           f b0 _      = b0
     ```
 
-    foldr : fold from right (....(f xn-2 (f xn-1 (f xn x0)))...)
+    foldr : fold from right `(....(f xn-2 (f xn-1 (f xn x0)))...)`
     ```haskell
     -- foldr :: (a -> b -> b) -> b -> [a] -> b
     foldr f b0 (x:xs) = f x (foldr f b0 xs)
