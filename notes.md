@@ -10,11 +10,12 @@
     -> tn = t1 -> (t2 -> (t3 -> (...)))`
 
 - Two ways to do define:
+
     1)
     ```haskell
     -- null : [a] -> Bool -- a function that returns true for empty list
     null [] = True
-    null _ = False
+    null _  = False
     ```
     2)
     ```haskell
@@ -67,4 +68,45 @@
     -- foldr :: (a -> b -> b) -> b -> [a] -> b
     foldr f b0 (x:xs) = f x (foldr f b0 xs)
           f b0 _      = b0
+    ```
+
+-  ZipWith : zip two lists using a function
+    ```haskell
+    -- zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+    zipWith f (x:xs) (y:ys) = f x y : zipWith f xs ys
+    ZipWith f _ _           = []
+    ```
+
+    take : gives first n elements from the list
+    ```haskell
+    -- take :: Int -> [a] -> [a]
+    take 0 _      = []
+    take n (x:xs) = x : take (n-1) xs
+    take _ _      = []
+    ```
+
+    tail : gives the list but first element
+    ```haskell
+    -- tail :: [a] -> [a]
+    tail (x:xs) = xs
+    tail _      = []
+    ```
+
+## Lazy evaluation
+-  Haskell follows *lazy evaluation* as oppossed to *strict evalution* in SML.
+    Though strict evaluations can be imposed explicitly
+    In strict evaluation, arguments are evaluated first and then functions are
+    applied while in lazy evaluation, arguments are evaluated lazily i.e. only
+    when there's no option other than evaluating them to get the desired result.
+
+    eg. In haskell, `[1 ... ]` is inf loop but `take 10 [1 ... ]` isn't
+
+    ```haskell
+    -- fibs :: [Int] -- stores inf fib sequence evaluated lazily
+    fibs = 1 : 1 : zipWith (+) fibs (tail fibs)
+
+    -- the prev code doesn't go to inf loops unless we just decide to print fibs
+    -- So if we want first 10 fibbonacci numbers what do we do?
+    x = take 10 fibs
+    print x -- This will infact enforce to compute the fibs till first 10 elem
     ```
