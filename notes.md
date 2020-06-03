@@ -80,9 +80,10 @@
     take : gives first n elements from the list
     ```haskell
     -- take :: Int -> [a] -> [a]
-    take 0 _      = []
-    take n (x:xs) = x : take (n-1) xs
-    take _ _      = []
+    take n xs | n <= 0     = []          -- use of guards
+              | otherwise  = case xs of
+                             (u : us) -> u : take (n-1) us
+                             _        -> []
     ```
 
     tail : gives the list but first element
@@ -93,11 +94,16 @@
     ```
 
 ## Lazy evaluation
--  Haskell follows *lazy evaluation* as oppossed to *strict evalution* in SML.
-    Though strict evaluations can be imposed explicitly
-    In strict evaluation, arguments are evaluated first and then functions are
+-  Haskell follows *lazy evaluation* as oppossed to *eager evalution* in SML.
+    Though eager evaluations can be imposed explicitly.
+    In eager evaluation, arguments are evaluated first and then functions are
     applied while in lazy evaluation, arguments are evaluated lazily i.e. only
     when there's no option other than evaluating them to get the desired result.
+
+    let `e = f e1 e2 e3 ... en`
+    **Eager evaluation**: first evaluate `e1, e2,...,en` to get `v1, v2,...,vn`
+    then compute `f v1 v2 v3 ... vn`
+    **Lazy evaluation**:
 
     eg. In haskell, `[1 ... ]` is inf loop but `take 10 [1 ... ]` isn't
 
@@ -109,4 +115,23 @@
     -- So if we want first 10 fibbonacci numbers what do we do?
     x = take 10 fibs
     print x -- This will infact enforce to compute the fibs till first 10 elem
+    ```
+
+    ```haskell
+    -- filter :: (a -> Bool) -> [a] -> [a]
+    filter pred (x:xs) | pred x    = x : filter pref xs
+                       | otherwise = filter pref xs
+           _ _                     = []
+
+    --sieve :: [Int] -> [Int]
+    sieve (x:xs) = x : sieve (filter dv xs)
+          where
+             dv t = (t `mod` x /= 0)
+    sieve [] = []
+
+    primes = sieve [2 .. ]
+    -- printing prime will be an inf loop
+    -- but doing
+    x = take 100 primes
+    print x -- is fine
     ```
